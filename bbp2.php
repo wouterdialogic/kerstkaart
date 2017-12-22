@@ -350,10 +350,8 @@ return 'url(#'+d.index+')'})
             function(d) {
                 return d.size * 1.2
             });
-
-
-
     })
+
       .on("mouseout", function (d,i) {
         mouse_coords = null;
         //d3.select(this).attr("class", "enter");
@@ -365,6 +363,13 @@ return 'url(#'+d.index+')'})
             }).remove();
             
     })
+
+      circles.        .append('text')
+             .attr('class', 'barsEndlineText')
+             .attr('text-anchor', 'middle')
+              .attr("x", 100)
+             .attr("y", 100)
+             .text('I am label')
 
       .attr("cy", function(d, i) { return d.cy; })
       .attr("cx", function(d, i) { return d.cx; })
