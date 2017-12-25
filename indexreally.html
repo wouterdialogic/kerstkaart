@@ -24,30 +24,9 @@
         .hero {
             min-height: 100px !important;
         }
-
-        input#message {
-            width: 300px;
-        }
-
-        .demo-wrap {
-            border-bottom: none !important; 
-        }
-
-        button, .btn {
-            background-color: #bbb;
-        }
-
-        #upload {
-            background-color: #bbb !important;
-        }        
-
-        a {
-            background-color: #bbb !important;
-        }
-
     </style>
     <body>
-        <section class="hero" hidden="true">
+        <section class="hero">
             <a id="home" name="home"></a>
             <div class="container">
                
@@ -89,7 +68,7 @@ $('#item').croppie(method, args);</code></pre>
         </section>
 
             <a id="demos" name="demos"></a>
-            <div class="section-header" hidden="true">
+            <div class="section-header">
                 <h2>So this is christmas...</h2>
             </div>
         <section id="hidden1" hidden="true">
@@ -158,8 +137,8 @@ vanilla.result('blob').then(function(blob) {
                         </div>
                     </div>
                 </div>
-                <div class="demo-wrap" hidden="true">
-                    <div class="container" hidden="true">
+                <div class="demo-wrap">
+                    <div class="container">
                         <div class="grid">
                             <div class="col-1-2">
                                 <strong>Resizer Example</strong>
@@ -191,8 +170,6 @@ resize.result('blob').then(function(blob) {
                 </div>
             </section>
 
-<br><section>
-</section>
 
 
 
@@ -202,56 +179,52 @@ resize.result('blob').then(function(blob) {
 
 
             <section>
-                <center>
                 <div class="demo-wrap upload-demo">
-                    <br><br><Br><Br>
-                    <div class="container" >
+                    <div class="container">
                     <div class="grid">
                         <div class="col-1-2">
-                            <strong>Share an image that gave you the best feeling in 2017</strong>
-
-                           <!--  <pre class="language-javascript"><code class="language-javascript">
-$u
+                            <strong>Uplowwad an image that gave you a goooood feeling in 2017</strong>
+<strong>Plus, 1 or 2 positive words that go with it.</strong>
+                            <pre class="language-javascript"><code class="language-javascript">
+$uploadCrop = $('#upload-demo').croppie({
+    enableExif: true,
+    viewport: {
+        width: 200,
+        height: 200,
+        type: 'circle'
+    },
+    boundary: {
+        width: 300,
         height: 300
     }
-});</code></pre> -->
+});</code></pre>
                             <div class="actions">
                                 <a class="btn file-btn">
-                                    <span id="uploadtext">Yes, I want to share something</span>
+                                    <span>Upload an image</span>
                                     <input type="file" id="upload" value="Choose a file" accept="image/*" />
-                                </a><br><Br>
-                                <button id="rotatebutton" class="vanilla-rotate" data-deg="90">Rotate left</button><br><br>
-                                <button id="previewbutton" class="upload-result">Preview</button><br><br>
+                                </a>
+                                <button class="upload-result">Preview</button>
+                                <button id="upload-to-server">Use this image</button>
                                 <!-- <button id="rotate">Rotate</button> -->
-                                <button id="useimagebutton">Use this image</button><br><br>
-                                <form id="shortmessageform" action="javascript:void(0);">
-  <strong>Plus, 1 or 2 positive words that fit with it</strong><input id="message" type="text" name="usrname" maxlength="20"><br>
-  <!-- <input type="submit" value="Submit"> -->
-</form><br>
-                                <button id="upload-really">This is what I want to share</button><br><br>
+                                <button class="vanilla-rotate" data-deg="-90">Rotate Left</button>
                                 <!-- <button class="vanilla-rotate" data-deg="90">Rotate Right</button> -->
                             </div>
                         </div>
-                        <div class="col-1-2" id="uploadwrap">
+                        <div class="col-1-2">
                             <div class="upload-msg">
                                 Upload a file to start cropping
                             </div>
                             <div class="upload-demo-wrap">
                                 <div id="upload-demo"></div>
                             </div>
-                            <br><Br><br><br>
                         </div>
                     </div>
-                    
+                    <form action="/action_page.php">
+  Username: <input id="message" type="text" name="usrname" maxlength="20"><br>
+  <input type="submit" value="Submit">
+</form>
                 </div>
                 </div>
-    </center>
-
-
-
-
-
-</section>
 
 
 
@@ -259,7 +232,14 @@ $u
 
 
 
-<section hidden="true">
+
+
+
+
+
+
+
+
 
                 <div class="demo-wrap hidden-demo" hidden="true">
                     <div class="container">

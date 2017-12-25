@@ -191,7 +191,7 @@ var Demo = (function() {
               success: function(data, textStatus, jqXHR)
               {
               	console.log("succesfully saved");
-                  // Do whatever you want with your 'data'
+                  window.location.href = 'bbp14.php?speed=2000&dialogic=false'; 		
               },
               error: function(jqXHR, textStatus, errorThrown) 
               {
@@ -201,10 +201,7 @@ var Demo = (function() {
          });
 	}
 
-
-
-
-
+	//only function i use:
 	function demoUpload() {
 		var $uploadCrop;
 
@@ -229,8 +226,6 @@ var Demo = (function() {
 		    }
 		}
 
-
-
 		$uploadCrop = $('#upload-demo').croppie({
 			viewport: {
 				width: 200,
@@ -240,26 +235,46 @@ var Demo = (function() {
 			enableExif: true
 		});
 
-		//$('#upload-to-server').on('click', function () { callAjax(this); });
+		//hide elements
+		$('#rotatebutton').hide();
+		$('#shortmessageform').hide();
+		$('#upload-to-server').hide();
+		$('#useimagebutton').hide();
+		$('#upload-really').hide();
+		$('#uploadwrap').hide();
 
+		//after affirmation of image
+		$('#useimagebutton').on('click', function () {
+			$('#shortmessageform').show();
+			$('#upload-really').show();
 
-		$('#upload-to-server').on('click', function (ev) {
-			
-			//callAjax("hi there");
-			//console.log("hi" + ev);
+		});
+
+		//save image and text
+		$('#upload-really').on('click', function (ev) {
 			$uploadCrop.croppie('result', {
 				type: 'canvas',
-				size: 'viewport'
+				size: 'viewport',
 			}).then(function (resp) {
-				//console.log(resp);
-				//popupResult({
-				//	src: "wouter"
-				//});
 				callAjax(resp);
 			});
 		});
 
-		$('#upload').on('change', function () { readFile(this); });
+		$('.vanilla-rotate').on('click', function(ev) {
+			$uploadCrop.croppie('rotate', parseInt($(this).data('deg')) );
+		});
+			
+		//after uploading an image
+		$('#upload').on('change', function () { 
+			$('#uploadwrap').show();
+			readFile(this); 
+			$('#rotatebutton').show();
+			//$('#shortmessageform').hide();
+			$('#useimagebutton').show();
+			$( "#uploadtext" ).html( "I want to use another image" );
+		});
+
+		//preview an image
 		$('.upload-result').on('click', function (ev) {
 			$uploadCrop.croppie('result', {
 				type: 'canvas',
@@ -306,13 +321,13 @@ var Demo = (function() {
 	}
 
 	function init() {
-		bindNavigation();
-		demoMain();
-		demoBasic();	
-		demoVanilla();	
-		demoResizer();
+		//bindNavigation();
+		//demoMain();
+		//demoBasic();	
+		//demoVanilla();	
+		//demoResizer();
 		demoUpload();
-		demoHidden();
+		//demoHidden();
 	}
 
 	return {

@@ -11,25 +11,27 @@ $number_of_entries = Entry::all()->count();
 
 echo "<Br>entries: ".$number_of_entries;
 
-
 $unique_id = 0;
 foreach ($all_entries as $key => $entry) {
   if (file_exists($entry->image_location)){
+    //if ($key == 1 or $key == 2 or $key == 3) {
     list($width, $height) = getimagesize($entry->image_location);
     $all_entries[$key]["width"] = $width;
     $all_entries[$key]["height"] = $height;
-    $entry->unique_id = $i;
-    $i++;
+    $entry->unique_id = $unique_id;
+    $unique_id++;
+    //} else {}
   } else {
     unset($all_entries[$key]);
   }
-  if (empty($width)) {
-  } 
 }
+
+//echo "<pre>";
+//print_r($all_entries);
+//echo "</pre>";
 
 $new_count = sizeof($all_entries);
 echo "count: ".$new_count;
-
 ?>
 
 <!DOCTYPE html>
@@ -72,8 +74,8 @@ text {
 }
 
 svg {
-  widht: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
 }
 
 </style>
@@ -81,51 +83,86 @@ svg {
 
 <button onClick="button_click()">click me!</button>
 <center>
-    <svg width="1000" height="500">
+    <svg width="1000" height="700">
     
-         <?php foreach ($all_entries as $key => $entry) {
-  echo '<defs id="mdef">
-         <pattern id="'.$entry->unique_id.'" x="0" y="0" height="1" width="1">';
-   echo '<image x="-40" y="-40" width="'.$entry->width.'" height="'.$entry->height.'" xlink:href="'.$entry->image_location.'"></image>';
- echo '</pattern>
-       </defs>' ;
+<?php foreach ($all_entries as $key => $entry) {
+echo '
 
- } ?>
+<defs id="mdef">
+<pattern id="'.$entry->unique_id.'" x="0" y="0" height="1" width="1">';
+echo '
+<image x="-20" y="-20" width="'.$entry->width.'" height="'.$entry->height.'" xlink:href="'.$entry->image_location.'"></image>';
+echo '    
+</pattern>
+</defs>' ;
+} ?>
 
-    <?php 
-   //echo '<defs id="mdef">
-   //    <pattern id="1" x="0" y="0" height="1" width="1">';
-   //    echo '<image x="-55" y="-40" width="250" height="250" xlink:href="img-1513942468-308.png"></image>';
-   //    echo '</pattern>
-   //  </defs>';    
-
-   //  echo '<defs id="mdef">
-   //    <pattern id="2" x="0" y="0" height="1" width="1">';
-   //    echo '<image x="-55" y="-40" width="250" height="250" xlink:href="img-1513942629-975.png"></image>';
-   //    echo '</pattern>
-   //   </defs>';
- ?>
-
-    <!--  <defs id="mdef">
-        <pattern id="1" x="0" y="0" height="1" width="1">
-          <image x="0" y="0" width="100" height="100" xlink:href="https://static.wixstatic.com/media/1db3d5_e551f3fd1f014dce9b1b98706686961b.jpg_srz_221_221_85_22_0.50_1.20_0.00_jpg_srz"></image>
-          <image x="-55" y="-40" width="250" height="250" xlink:href="img-1513942489-669.png"></image>
-        </pattern>
-      </defs> -->
   </svg>
-    <!-- <svg></svg> -->
+
 </center>
-<button onClick="update2()">click</button>
-<div class="wouter">wouter</div>
-<a href=#test>test</a>
+circles:
+min on screen<input id="min_amount_of_circles_on_screen" type="text">
+max on screen<input id="max_amount_of_circles_on_screen" type="text">
+<Br>add:
+min to add<input id="add_min" type="text">
+max to add<input id="add_max" type="text">
+<Br>remove:
+min to remove<input id="remove_min" type="text">
+max to remove<input id="remove_max" type="text">
+<Br>speed:
+transition time<input id="time_interval_in_ms_of_transition" type="text">
+transition duration<input id="transition_duration" type="text">
 <script src="https://d3js.org/d3.v4.js"></script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 <script>
+
+  //change handlers:
+  $("#max_amount_of_circles_on_screen" ).change(function() {
+    max_amount_of_circles_on_screen = parseInt($("#max_amount_of_circles_on_screen" ).val());
+    console.log(max_amount_of_circles_on_screen);
+    console.log(typeof(max_amount_of_circles_on_screen));
+});  
+  $("#min_amount_of_circles_on_screen" ).change(function() {
+    min_amount_of_circles_on_screen = parseInt($("#min_amount_of_circles_on_screen" ).val());
+    console.log(min_amount_of_circles_on_screen);
+});
+  $("#add_min" ).change(function() {
+    add_min = parseInt($("#add_min" ).val());
+    console.log(add_min);
+});  
+  $("#add_max" ).change(function() {
+    add_max = parseInt($("#add_max" ).val());
+    console.log(add_max);
+});
+  $("#remove_min" ).change(function() {
+    remove_min = parseInt($("#remove_min" ).val());
+    console.log(remove_min);
+});  
+  $("#remove_max" ).change(function() {
+    remove_max = parseInt($("#remove_max" ).val());
+    console.log(remove_max);
+});  
+  $("#time_interval_in_ms_of_transition" ).change(function() {
+    time_interval_in_ms_of_transition = parseInt($("#time_interval_in_ms_of_transition" ).val());
+    console.log(time_interval_in_ms_of_transition);
+});  
+  $("#transition_duration" ).change(function() {
+    transition_duration = parseInt($("#transition_duration").val());
+    console.log(transition_duration);
+});
 
     initial_amount_of_circles = <?php echo $new_count ?> ;
     max_amount_of_circles_on_screen = 12;
-    min_amount_of_circles_on_screen = 15;
-    time_interval_in_ms_of_transition = 1100;
-    transition_duration = 1100;
+    min_amount_of_circles_on_screen = 20;
+    remove_min = 5;
+    remove_max = 9;
+    add_min = 3;
+    add_max = 4;
+    time_interval_in_ms_of_transition = 3500;
+    transition_duration = 3500;
     animate = 1;
     mouse_coords = null;
 
@@ -136,8 +173,7 @@ svg {
     .attr("class", "group_circles");
 
     spheres = create_this_many_objects(initial_amount_of_circles);
-
-    selection_of_spheres = select_a_few_circles(spheres, min_amount_of_circles_on_screen, 10);
+    selection_of_spheres = select_a_few_circles(spheres, min_amount_of_circles_on_screen, max_amount_of_circles_on_screen);
 
 //initial_drawing
 //draw_circles(selection_of_spheres);
@@ -146,20 +182,17 @@ svg {
 if (animate) {
     t = d3.interval(function() {
         if (check_if_max_number_of_circles_on_screen()) {
-
             remove_a_few_and_add_one_circle();
-
         }
-
         //transfer_one_circle_to_selection();
         transfer_a_few_circles();
 
         if (animate) {
             draw_circles(selection_of_spheres);
         }
-     //giveCircles(d3.shuffle(circles)
-     //    .slice(0, Math.floor(Math.random() * 5))
-     //    .sort());
+     d3.shuffle(selection_of_spheres)
+         .slice(0, Math.floor(Math.random() * 5))
+         .sort();
  }, time_interval_in_ms_of_transition);
 }
 
@@ -176,18 +209,43 @@ function button_click() {
 }
 
 function remove_a_few_and_add_one_circle() {
-    amount_to_remove = return_number_between(2, 4);
-
+    //console.log("selection: "+selection_of_spheres.length);
+    //console.log("spheres: "+spheres.length);
+    amount_to_remove = return_number_between(remove_min, remove_max);
+    console.log("removing: "+amount_to_remove);
     for (i=0; i<amount_to_remove; i++) {
         spheres.push( selection_of_spheres.splice([Math.floor(Math.random() * selection_of_spheres.length)], 1)[0] );
     }
 
-    selection_of_spheres.push( spheres.splice([Math.floor(Math.random() * spheres.length)], 1)[0] );
+    //selection_of_spheres.push( spheres.splice([Math.floor(Math.random() * spheres.length)], 1)[0] );
 
 }
 
+function remove_a_few_circles() {
+    amount_to_remove = return_number_between(remove_min, remove_max);
+    console.log("removing: "+amount_to_remove);
+    for (i=0; i<amount_to_remove; i++) {
+        spheres.push( selection_of_spheres.splice([Math.floor(Math.random() * selection_of_spheres.length)], 1)[0] );
+    }
+}
+
 function transfer_a_few_circles() {
-    amount_to_add = return_number_between(1, 3);
+    amount_to_add = return_number_between(add_min, add_max);
+    //console.log("");
+    //console.log("add_min: "+add_min);
+    //console.log("add_max: "+add_max);
+    //console.log("");
+    //console.log("amount_to_add: "+amount_to_add);
+    //console.log("selection: "+selection_of_spheres.length);
+    //console.log("spheres: "+spheres.length);
+    console.log("adding: "+amount_to_add);
+    while (max_amount_of_circles_on_screen < selection_of_spheres.length + amount_to_add) {
+        //console.log("ey must remeve mohre");
+        remove_a_few_circles();
+    }
+
+   // console.log("after removing: selection: "+selection_of_spheres.length);
+   // console.log("after removing: spheres: "+spheres.length);
 
     for (i=0; i<amount_to_add; i++) {
         selection_of_spheres.push( spheres.splice([Math.floor(Math.random() * spheres.length)], 1)[0] );
@@ -200,7 +258,9 @@ function transfer_one_circle_to_selection() {
 
 function return_number_between(min,max)
 {
-    return Math.floor( Math.random() * (max-min+1) + min );
+  random_number = Math.floor( Math.random() * (max-min+1) + min );
+  console.log("min: "+min+" - max: "+max+" - gives: "+random_number);
+    return random_number;
 }
 
 function create_this_many_objects(this_many) {
@@ -214,7 +274,8 @@ function create_this_many_objects(this_many) {
             "cx": return_number_between(100, 800),
             "cy": return_number_between(100, 800),
             "index": i,
-            "size": return_number_between(45, 70),
+            //"size": return_number_between(45, 70),
+            "size": return_number_between(100, 100),
             "transitionBusy": 0,
             "other": return_number_between(5, 50)
         };
@@ -242,6 +303,8 @@ function determine_circle_status(input = null) {
     return d3.transition().duration(transition_duration);
 }
 
+switching = true;
+
 function do_random_animation(d = null) {
    animation_type = Math.floor(Math.random() * 100);
    if (animation_type < 50) {
@@ -252,30 +315,18 @@ function do_random_animation(d = null) {
 }
 
 function draw_circles(data) {
-    
-
     var t = determine_circle_status();
     g = d3.select("g");
 
-    //console.log(countertrello);
-
-
     var circles = g.selectAll("circle.update, circle.exit, circle.enter")
-    
-      //.data(data, function(d) {return d;}); //THIS IS QUITE INTERESTING
-    
-      .data(data); //THIS IS QUITE INTERESTING
+    //.data(data, function(d) {return d;}); //THIS IS QUITE INTERESTING
+    .data(data); //THIS IS QUITE INTERESTING
 
     circles.exit()
     .attr("class", "exit")
     .transition(t)
-    //.attr("cx", function(d, i) {return i*55})
-    //.attr("cy", function(d) {return d.y})
     .attr("r", function(d) {
-        //console.log(this.transitionBusy); 
-        //console.log(d.transitionBusy); 
         if (d.busy == true) {
-
         } else {
         return 0;
         }
@@ -296,17 +347,13 @@ function draw_circles(data) {
       //.attr("cx", function(d, i) { return  d.cx})
       //.style("fill", "transparent")
        //.style("fill", "url(#6)")
-      .style("fill", function(d, i) {return 'url(#'+d.index+')'})
+      //.style("fill", function(d, i) {return 'url(#'+d.index+')'})
       .attr("cx", function(d, i) {return return_calculated_coords(d, i)})
       .attr("cy", function(d, i) {return  d.cy})
-      // .attr("fill", "pink")
       .attr("r", 0)
       .transition(t)
-      //.attr("cy", function(d) {return d.y})
       .style("fill-opacity", 1)
       .attr("r", function(d) {
-        //console.log(this.transitionBusy);
-    // this.transitionBusy
     return d.size})
       .attr("cy", function(d, i) {
         return  d.cy
@@ -318,14 +365,13 @@ function draw_circles(data) {
   // ENTER new elements present in new data.
   circles.enter().append("circle")
   .attr("class", "enter")
-      //.attr("dy", ".35em")
-      //.attr("fill", "green")
        .style("fill", function(d, i) {
-        console.log("index"+d.index);
-return 'url(#'+d.index+')'})
+        //console.log("index"+d.index);
+        return 'url(#'+d.index+')'})
         
       //.attr("xlink:href", "https://static.wixstatic.com/media/1db3d5_e551f3fd1f014dce9b1b98706686961b.jpg_srz_221_221_85_22_0.50_1.20_0.00_jpg_srz")
       //.attr("cy", -60)
+      .style("stroke","black").style("stroke-width", "1px").style("opacity","1.0")
       .on("mouseover", function (d,i) {
         currentObject = d3.select(this);
         console.log("mouse");
@@ -336,10 +382,12 @@ return 'url(#'+d.index+')'})
         d3.select(this).style("opacity","1.0");
         d3.select(this).attr("class", "sexy");
 
-        d3.select(this).transition().duration(3000).attr("r", 
+        d3.select(this).transition().duration(1000)
+        .attr("r", 
             function(d) {
-                return d.size * 1.2
+                return d.size * 1.0
             });
+        .style("stroke","red").style("stroke-width", "20px").style("opacity","1.0")
 
 
 
@@ -349,7 +397,7 @@ return 'url(#'+d.index+')'})
         //d3.select(this).attr("class", "enter");
         //d3.select(this).style("stroke","lightgrey").style("stroke-width", "3.5px").style("opacity","0.55")
         d3.select(this).style("opacity","0.55")
-                d3.select(this).transition().duration(5000).attr("r", 
+                d3.select(this).transition().duration(3000).attr("r", 
             function(d) {
                 return 0; 
             }).remove();
@@ -378,12 +426,12 @@ return 'url(#'+d.index+')'})
   }
 
   function return_calculated_coords(d, i) {
-    console.log(mouse_coords);
+    //console.log(mouse_coords);
     return d.cx;
   }
 
   function return_transition(input) {
-    console.log(input);
+    //console.log(input);
     return d3.transition().duration(transition_duration);
 }
 

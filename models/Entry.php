@@ -8,6 +8,8 @@ Class Entry extends Model {
 
 	//public $connection = 'sqlite';
 	
+	
+
 	public static $name = "christmas";
 
 	public $timestamps = false;

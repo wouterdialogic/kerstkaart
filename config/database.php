@@ -30,5 +30,3 @@ $capsule->addConnection([
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
-
-echo "lol";
